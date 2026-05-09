@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Voice Chat</title>
+</head>
+<body>
+
+<h2>🎤 AI Voice Chat System</h2>
+
+<input id="input" placeholder="ရေးပါ..." />
+<button onclick="send()">Send</button>
+
+<p id="output"></p>
+
+<audio id="audio" controls></audio>
+
+<script>
+async function send() {
+  const text = document.getElementById("input").value;
+
+  // 🤖 ChatGPT request
+  const aiRes = await fetch("https://YOUR-BACKEND.onrender.com/chat", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ message: text })
+  });
+
+  const aiData = await aiRes.json();
+  document.getElementById("output").innerText = aiData.reply;
+
+  // 🔊 Voice request (ElevenLabs)
+  const voiceRes = await fetch("https://YOUR-BACKEND.onrender.com/voice", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ text: aiData.reply })
+  });
+
+  const audioBuffer = await voiceRes.arrayBuffer();
+  const blob = new Blob([audioBuffer], { type: "audio/mpeg" });
+
+  document.getElementById("audio").src =
+    URL.createObjectURL(blob);
+}
+</script>
+
+</body>
+</html>
