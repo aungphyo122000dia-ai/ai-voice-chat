@@ -15,11 +15,13 @@
 <audio id="audio" controls></audio>
 
 <script>
+const BASE_URL = "https://YOUR-RENDER.onrender.com"; // 🔥 ဒီနေရာကိုပြောင်း
+
 async function send() {
   const text = document.getElementById("input").value;
 
-  // 🤖 ChatGPT request
-  const aiRes = await fetch("https://YOUR-BACKEND.onrender.com/chat", {
+  // 🤖 ChatGPT
+  const aiRes = await fetch(`${BASE_URL}/chat`, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({ message: text })
@@ -28,8 +30,8 @@ async function send() {
   const aiData = await aiRes.json();
   document.getElementById("output").innerText = aiData.reply;
 
-  // 🔊 Voice request (ElevenLabs)
-  const voiceRes = await fetch("https://YOUR-BACKEND.onrender.com/voice", {
+  // 🔊 Voice (ElevenLabs)
+  const voiceRes = await fetch(`${BASE_URL}/voice`, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({ text: aiData.reply })
@@ -45,4 +47,3 @@ async function send() {
 
 </body>
 </html>
-fetch("https://YOUR-RENDER.onrender.com/chat")
